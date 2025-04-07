@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ephemeral Lens - Photography Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Preloader Animation -->
+    <div class="preloader">
+        <div class="preloader-content">
+            <h1 class="preloader-title">Photography</h1>
+            <p>portfolio</p>
+        </div>
+    </div>
+
+    <!-- Camera Shutter Effect Overlay -->
+    <div class="shutter-overlay">
+        <div class="shutter-blade top-left"></div>
+        <div class="shutter-blade top-right"></div>
+        <div class="shutter-blade bottom-left"></div>
+        <div class="shutter-blade bottom-right"></div>
+        <!-- Add more blades if desired for a more complex effect -->
+    </div>
+
+    <!-- Lightbox Popup -->
+    <div class="lightbox">
+        <span class="lightbox-close">×</span>
+        <img class="lightbox-content" src="" alt="Popup Image">
+    </div>
+
+    <!-- Main Content (Initially hidden by preloader logic) -->
+    <div class="main-content">
+        <header>
+            <nav>
+                <a href="#" class="nav-link active" data-genre="portraits">Portraits</a>
+                <a href="#" class="nav-link" data-genre="landscapes">Landscapes</a>
+                <a href="#" class="nav-link" data-genre="wildlife">Wildlife</a>
+                <a href="#" class="nav-link" data-genre="events">Events</a>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Portrait Gallery -->
+            <section id="portraits" class="gallery active">
+                <h2>Cars</h2>
+                <div class="gallery-grid">
+                    <!-- Add placeholder images - use real URLs or local paths -->
+                    <img src="pics/p1.jpg" alt="Portrait 1" class="gallery-image">
+                    <img src="pics/p2.jpg" alt="Portrait 2" class="gallery-image">
+                    <img src="pics/p3.jpg" alt="Portrait 3" class="gallery-image">
+                    <img src="pics/p4.jpg" alt="Portrait 4" class="gallery-image">
+                    <img src="pics/p5.jpg" alt="Portrait 5" class="gallery-image">
+                    <img src="pics/p6.jpg" alt="Portrait 6" class="gallery-image">
+                </div>
+            </section>
+
+            <!-- Landscape Gallery -->
+            <section id="landscapes" class="gallery">
+                <h2>Cars</h2>
+                <div class="gallery-grid">
+                    <img src="pics/p7.jpg" alt="Landscape 1" class="gallery-image">
+                    <img src="pics/p8.jpg" alt="Landscape 2" class="gallery-image">
+                    <img src="pics/p9.jpg" alt="Landscape 3" class="gallery-image">
+                    <img src="pics/p10.jpg" alt="Landscape 4" class="gallery-image">
+                </div>
+            </section>
+
+            <!-- Wildlife Gallery -->
+            <section id="wildlife" class="gallery">
+                <h2>Cars</h2>
+                <div class="gallery-grid">
+                    <img src="pics/p11.jpg" alt="Wildlife 1" class="gallery-image">
+                    <img src="pics/p12.jpg" alt="Wildlife 2" class="gallery-image">
+                    <img src="pics/p13.jpg" alt="Wildlife 3" class="gallery-image">
+                    <img src="pics/p14.jpg" alt="Wildlife 4" class="gallery-image">
+                    <img src="pics/p15.jpg" alt="Wildlife 5" class="gallery-image">
+                </div>
+            </section>
+
+            <!-- Events Gallery -->
+            <section id="events" class="gallery">
+                <h2>Cars</h2>
+                <div class="gallery-grid">
+                     <img src="pics/p16.jpg" alt="Event 1" class="gallery-image">
+                     <img src="pics/p17.jpg" alt="Event 2" class="gallery-image">
+                     <img src="pics/p2.jpg" alt="Event 3" class="gallery-image">
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>© 2024 Ephemeral Lens Demo. All Rights Reserved.</p>
+            <!-- Add generic contact/social links if needed -->
+        </footer>
+    </div> <!-- End main-content -->
+
+    <script src="script.js"></script>
+</body>
+</html>

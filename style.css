@@ -1,0 +1,361 @@
+/* Basic Reset & Body Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1a1a1a; /* Dark background */
+    color: #f0f0f0;
+    line-height: 1.6;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* --- Preloader --- */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000; /* Black background for preloader */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+}
+
+.preloader-content {
+    text-align: center;
+    opacity: 0; /* Start hidden */
+    animation: fadeInContent 1.5s ease-out 0.5s forwards; /* Fade in after delay */
+}
+
+.preloader-title {
+    font-size: 3rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    letter-spacing: 2px;
+    animation: scaleUpText 1s ease-in-out 0.5s forwards; /* Animate title */
+}
+
+.preloader p {
+    font-size: 1.2rem;
+    color: #aaa;
+}
+
+.preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+@keyframes fadeInContent {
+    to { opacity: 1; }
+}
+
+@keyframes scaleUpText {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* --- Main Content Visibility --- */
+.main-content {
+    opacity: 0; /* Start hidden */
+    transition: opacity 0.8s ease-in 0.2s; /* Fade in after preloader fades */
+}
+
+body.loaded .main-content {
+    opacity: 1; /* Show when body gets 'loaded' class */
+}
+
+
+/* --- Header & Navigation --- */
+header {
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+    padding: 1rem 0;
+    position: sticky; /* Stick to top */
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(5px); /* Nice blur effect */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem; /* Spacing between nav items */
+}
+
+.nav-link {
+    color: #ccc;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    font-size: 1.1rem;
+    position: relative;
+    transition: color 0.3s ease, transform 0.3s ease;
+    letter-spacing: 1px;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #00bcd4; /* Accent color */
+    transition: width 0.4s ease;
+}
+
+.nav-link:hover {
+    color: #fff;
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%; /* Underline animation */
+}
+
+.nav-link.active {
+    color: #00bcd4; /* Highlight active link */
+    font-weight: bold;
+}
+
+/* --- Main Galleries --- */
+main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 2rem auto; /* Center the content */
+}
+
+.gallery {
+    display: none; /* Hide galleries by default */
+    opacity: 0;
+    animation: galleryFadeIn 0.8s ease forwards; /* Animation for switching */
+}
+
+.gallery.active {
+    display: block; /* Show active gallery */
+    opacity: 1;
+}
+
+.gallery h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2.5rem;
+    color: #e0e0e0;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    border-bottom: 2px solid #00bcd4;
+    display: inline-block; /* Allow border only under text */
+    padding-bottom: 0.5rem;
+    position: relative; /* Position center helper */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+@keyframes galleryFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Gallery Grid --- */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+    gap: 1.5rem;
+}
+
+.gallery-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), /* Smoother scale */
+                box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                filter 0.4s ease;
+    will-change: transform, box-shadow; /* Performance hint */
+}
+
+.gallery-image:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+    filter: brightness(1.1); /* Subtle brightness */
+}
+
+/* --- Camera Shutter Effect --- */
+.shutter-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none; /* Allow clicks through when inactive */
+    z-index: 2000; /* Above content, below lightbox */
+    opacity: 0; /* Hidden by default */
+}
+
+.shutter-blade {
+    position: absolute;
+    width: 55%; /* Overlap slightly */
+    height: 55%;
+    background-color: #000; /* Shutter color */
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Shutter animation timing */
+    /* Start blades closed */
+    transform: scale(1);
+}
+
+.shutter-blade.top-left { top: 0; left: 0; transform-origin: bottom right; }
+.shutter-blade.top-right { top: 0; right: 0; transform-origin: bottom left; }
+.shutter-blade.bottom-left { bottom: 0; left: 0; transform-origin: top right; }
+.shutter-blade.bottom-right { bottom: 0; right: 0; transform-origin: top left; }
+
+/* Shutter Close Animation State */
+.shutter-overlay.active .shutter-blade {
+    transform: scale(1); /* Blades meet in the middle */
+}
+
+/* Shutter Open Animation State (triggered after close) */
+.shutter-overlay.open .shutter-blade.top-left { transform: scale(0) translateX(-50%) translateY(-50%); }
+.shutter-overlay.open .shutter-blade.top-right { transform: scale(0) translateX(50%) translateY(-50%); }
+.shutter-overlay.open .shutter-blade.bottom-left { transform: scale(0) translateX(-50%) translateY(50%); }
+.shutter-overlay.open .shutter-blade.bottom-right { transform: scale(0) translateX(50%) translateY(50%); }
+
+/* Initial state before activating (start slightly open/outside) */
+.shutter-overlay:not(.active) .shutter-blade.top-left { transform: scale(0) translateX(-50%) translateY(-50%); }
+.shutter-overlay:not(.active) .shutter-blade.top-right { transform: scale(0) translateX(50%) translateY(-50%); }
+.shutter-overlay:not(.active) .shutter-blade.bottom-left { transform: scale(0) translateX(-50%) translateY(50%); }
+.shutter-overlay:not(.active) .shutter-blade.bottom-right { transform: scale(0) translateX(50%) translateY(50%); }
+
+/* --- Lightbox --- */
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* Darker overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000; /* Highest level */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    padding: 20px; /* Padding around the image */
+    cursor: zoom-out; /* Indicate closable background */
+}
+
+.lightbox.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-content {
+    display: block;
+    max-width: 90%;
+    max-height: 90vh;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; /* Springy zoom effect */
+    box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+    border-radius: 5px;
+    cursor: default; /* Default cursor for the image itself */
+}
+
+.lightbox.visible .lightbox-content {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #fff;
+    font-size: 3rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+    line-height: 1;
+}
+
+.lightbox-close:hover {
+    color: #00bcd4; /* Accent color on hover */
+    transform: rotate(90deg) scale(1.1);
+}
+
+/* --- Footer --- */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 3rem;
+    background-color: #111;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* --- Responsiveness --- */
+@media (max-width: 768px) {
+    nav {
+        gap: 0.5rem; /* Closer links */
+        flex-wrap: wrap; /* Allow wrapping on small screens */
+        justify-content: space-around; /* Better distribution */
+        padding: 0 1rem;
+    }
+    .nav-link {
+        font-size: 1rem;
+        padding: 0.4rem 0.6rem;
+    }
+    main {
+        padding: 1rem;
+    }
+    .gallery h2 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust grid for smaller screens */
+        gap: 1rem;
+    }
+    .preloader-title {
+        font-size: 2.5rem;
+    }
+    .lightbox-close {
+        font-size: 2.5rem;
+        top: 15px;
+        right: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+     nav {
+        gap: 0.2rem;
+    }
+    .nav-link {
+        font-size: 0.9rem;
+        padding: 0.3rem 0.4rem;
+    }
+    .gallery h2 {
+        font-size: 1.8rem;
+    }
+     .gallery-grid {
+        grid-template-columns: 1fr 1fr; /* Simpler grid */
+        gap: 0.5rem;
+    }
+    .preloader-title {
+        font-size: 2rem;
+    }
+     .lightbox-close {
+        font-size: 2rem;
+     }
+}
