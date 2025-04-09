@@ -348,7 +348,48 @@ footer {
     font-size: 0.9rem;
 }
 
+/* New styles for footer socials */
+.socials {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.socials a {
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.social-link.facebook { color: #3b5998; }    /* Facebook Blue */
+.social-link.instagram { color: #C13584; }   /* Instagram Pink */
+.social-link.twitter { color: #1DA1F2; }     /* Twitter Blue */
+
+.socials a:hover {
+    text-decoration: underline;
+}
+
 /* --- Responsiveness --- */
 /* ... Keep your existing media queries ... */
 @media (max-width: 768px) { /* ... */ }
 @media (max-width: 480px) { /* ... */ }
+
+/* Responsive Gallery Grid adjustments */
+@media (min-width: 480px) and (max-width: 768px) {
+    .gallery-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on medium mobile screens */
+    }
+}
+
+@media (max-width: 479px) {
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller mobile screens */
+    }
+}
+
+/* Footer Social Icons Size */
+.socials a i {
+    font-size: 1.5rem;
+}
