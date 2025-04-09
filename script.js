@@ -1,50 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
-
+    // --- Selectors related to Preloader ---
     const preloader = document.querySelector('.preloader');
-    const mainContent = document.querySelector('.main-content');
+    const mainContent = document.querySelector('.main-content'); // Needed to control visibility
     const navLinks = document.querySelectorAll('.nav-link');
     const galleries = document.querySelectorAll('.gallery');
     const galleryImages = document.querySelectorAll('.gallery-image');
-    const shutterOverlay = document.querySelector('.shutter-overlay');
     const lightbox = document.querySelector('.lightbox');
     const lightboxContent = document.querySelector('.lightbox-content');
     const lightboxClose = document.querySelector('.lightbox-close');
+    const shutter = document.querySelector('.shutter'); // Get the new shutter element
+    const firstFlap = document.querySelector('.flap'); // Get one flap to listen for animation end
 
     // --- Preloader Logic ---
     window.addEventListener('load', () => {
-        setTimeout(() => { // Give animations a moment to potentially finish
+        setTimeout(() => { // Ensure content is rendered
             preloader.classList.add('hidden');
-            document.body.classList.add('loaded'); // Add class to body for content fade-in trigger
-        }, 2500); // Adjust timing based on preloader animation length (needs to be >= total animation duration)
-
-        // Clean up preloader from DOM after transition
-        preloader.addEventListener('transitionend', () => {
-            if (preloader.classList.contains('hidden')) {
-                preloader.style.display = 'none';
-            }
-        });
+            document.body.classList.add('loaded'); // Trigger main content fade-in
+        }, 1000); // Increased delay for a slower preloader
     });
 
-    // --- Seamless Navigation ---
+    // --- Navigation Logic ---
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent default anchor behavior
+            e.preventDefault();
 
-            // Get target genre from data attribute
-            const targetGenre = link.dataset.genre;
-
-            // Update active link state
-            navLinks.forEach(navLink => navLink.classList.remove('active'));
+            // Update active link
+            navLinks.forEach(l => l.classList.remove('active'));
             link.classList.add('active');
 
-            // Switch active gallery section
+            // Switch gallery
+            const targetGenre = link.getAttribute('data-genre');
             galleries.forEach(gallery => {
                 if (gallery.id === targetGenre) {
-                    // Remove any existing active class to reset animation
-                    gallery.classList.remove('active');
-                    // Force reflow to restart animation if clicking same tab again
-                    void gallery.offsetWidth;
-                    // Add active class to trigger display and animation
                     gallery.classList.add('active');
                 } else {
                     gallery.classList.remove('active');
@@ -53,64 +40,63 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Image Click Logic (Shutter + Lightbox) ---
+    // --- Lightbox & Shutter Logic ---
+    let isShutterAnimating = false; // Flag to prevent double clicks
+
     galleryImages.forEach(image => {
         image.addEventListener('click', () => {
-            const imageSrc = image.getAttribute('src');
-            triggerShutterAndLightbox(imageSrc);
+            if (isShutterAnimating) return; // Prevent triggering if already animating
+            isShutterAnimating = true;
+            const imageUrl = image.getAttribute('src');
+
+            // 1. Activate Shutter
+            shutter.classList.add('active');
+
+            // Remove immediate lightbox display and wait for shutter animation end
+            const animationEndHandler = () => {
+                lightboxContent.setAttribute('src', imageUrl);
+                lightbox.classList.add('visible');
+                shutter.classList.remove('active');
+                isShutterAnimating = false;
+                firstFlap.removeEventListener('animationend', animationEndHandler);
+            };
+            firstFlap.addEventListener('animationend', animationEndHandler);
+
+            // Fallback timer: adjusted to match the slower animation duration
+            setTimeout(() => {
+                if (isShutterAnimating) {
+                    console.warn("AnimationEnd event fallback triggered.");
+                    lightboxContent.setAttribute('src', imageUrl);
+                    lightbox.classList.add('visible');
+                    shutter.classList.remove('active');
+                    isShutterAnimating = false;
+                    firstFlap.removeEventListener('animationend', animationEndHandler);
+                }
+            }, 1800); // Increased fallback duration for the slower shutter animation
         });
     });
 
-    // Function to handle shutter and lightbox sequence
-    function triggerShutterAndLightbox(imageSrc) {
-        // 1. Show and activate shutter (close animation)
-        shutterOverlay.style.opacity = '1'; // Make it visible
-        shutterOverlay.style.pointerEvents = 'auto'; // Make it interactable briefly if needed
-        shutterOverlay.classList.add('active');
-        shutterOverlay.classList.remove('open'); // Ensure it starts from closed/ready state
-
-        // Use setTimeout to sequence animations
-        setTimeout(() => {
-            // 2. Shutter is closed, now prepare and show lightbox
-            lightboxContent.setAttribute('src', imageSrc);
-            lightbox.classList.add('visible');
-
-            // 3. Immediately trigger shutter open animation
-            shutterOverlay.classList.add('open');
-             shutterOverlay.classList.remove('active');
-
-             // 4. Hide shutter overlay after its open animation finishes
-             setTimeout(() => {
-                 shutterOverlay.style.opacity = '0';
-                 shutterOverlay.style.pointerEvents = 'none';
-                 // Optional: could fully remove classes 'open' here if needed for reset
-             }, 500); // Match shutter transition duration in CSS
-
-        }, 500); // Match shutter transition duration in CSS
-    }
-
-
-    // --- Lightbox Close Logic ---
-    function closeLightbox() {
+    // Close Lightbox
+    const closeLightbox = () => {
         lightbox.classList.remove('visible');
-         // Optional: Clear the image source after animation to prevent seeing old image briefly next time
-         setTimeout(() => {
+        // Optional: Delay clearing the src to prevent flash of empty space
+        setTimeout(() => {
              if (!lightbox.classList.contains('visible')) { // Check if it wasn't reopened quickly
-                 lightboxContent.setAttribute('src', '');
+                lightboxContent.setAttribute('src', '');
              }
-         }, 500); // Match lightbox fade-out duration
-    }
+        }, 500); // Match lightbox transition duration
+    };
 
     lightboxClose.addEventListener('click', closeLightbox);
-    // Close lightbox if clicking on the background overlay
     lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) { // Only close if click is directly on the overlay
+        // Close only if clicking the background overlay, not the image itself
+        if (e.target === lightbox) {
             closeLightbox();
         }
     });
 
-    // Close lightbox with Escape key
-     document.addEventListener('keydown', (e) => {
+    // Optional: Close lightbox with Escape key
+    document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && lightbox.classList.contains('visible')) {
             closeLightbox();
         }
