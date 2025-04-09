@@ -183,7 +183,11 @@ main {
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
-    gap: 1.5rem;
+    gap: 2rem; /* increased gap for a more grid-like layout */
+}
+
+body.no-scroll {
+    overflow: hidden;
 }
 
 .gallery-image {
