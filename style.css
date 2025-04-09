@@ -24,10 +24,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10000;
+    z-index: 10000; /* Should be the highest */
     opacity: 1;
     visibility: visible;
-    transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+    transition: opacity 2s ease-in-out, visibility 2s ease-in-out;
+    pointer-events: auto; /* Initially clickable/interactive if needed, though usually not */
 }
 
 .preloader-content {
@@ -52,6 +53,7 @@ body {
 .preloader.hidden {
     opacity: 0;
     visibility: hidden;
+    pointer-events: none; /* Prevent interaction when hidden */
 }
 
 @keyframes fadeInContent {
@@ -63,7 +65,7 @@ body {
     100% { transform: scale(1); opacity: 1; }
 }
 
-/* --- Main Content Visibility --- */
+/* --- Main Content Visibility (Related to Preloader) --- */
 .main-content {
     opacity: 0; /* Start hidden */
     transition: opacity 0.8s ease-in 0.2s; /* Fade in after preloader fades */
@@ -73,6 +75,18 @@ body.loaded .main-content {
     opacity: 1; /* Show when body gets 'loaded' class */
 }
 
+/* --- Responsive Preloader Title (Optional, but included in your original) --- */
+@media (max-width: 768px) {
+    .preloader-title {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .preloader-title {
+        font-size: 2rem;
+    }
+}
 
 /* --- Header & Navigation --- */
 header {
@@ -129,6 +143,7 @@ nav {
 }
 
 /* --- Main Galleries --- */
+/* ... Keep your existing main/gallery styles ... */
 main {
     padding: 2rem;
     max-width: 1200px;
@@ -161,12 +176,10 @@ main {
     transform: translateX(-50%);
 }
 
-@keyframes galleryFadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+@keyframes galleryFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
 /* --- Gallery Grid --- */
+/* ... Keep your existing gallery grid styles ... */
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
@@ -191,52 +204,77 @@ main {
     filter: brightness(1.1); /* Subtle brightness */
 }
 
-/* --- Camera Shutter Effect --- */
-.shutter-overlay {
+/* --- REMOVE OLD SHUTTER STYLES ---
+.shutter-overlay { ... }
+.shutter-blade { ... }
+.shutter-overlay.active .shutter-blade { ... }
+.shutter-overlay.open .shutter-blade { ... }
+--- END REMOVE OLD SHUTTER STYLES --- */
+
+
+/* --- NEW Camera Shutter Effect (Flap Style) --- */
+.shutter {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+    right: 0;
+    bottom: 0;
+    z-index: 2000; /* Below lightbox (3000) but above content */
     pointer-events: none; /* Allow clicks through when inactive */
-    z-index: 2000; /* Above content, below lightbox */
-    opacity: 0; /* Hidden by default */
+    overflow: hidden;
+    opacity: 0; /* Start hidden */
+    visibility: hidden; /* Start hidden */
+    transition: opacity 0.1s ease, visibility 0.1s ease; /* Fast fade for visibility */
+    background: transparent; /* Ensure no background interferes */
 }
 
-.shutter-blade {
+.shutter.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto; /* Block clicks while animating */
+}
+
+.flap {
+    --p: calc(var(--i) / var(--flaps)); /* Percentage/progress based on flap index */
+    width: 150vmax; /* Large size to cover screen when rotated */
+    height: 150vmax;
     position: absolute;
-    width: 55%; /* Overlap slightly */
-    height: 55%;
-    background-color: #000; /* Shutter color */
-    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Shutter animation timing */
-    /* Start blades closed */
-    transform: scale(1);
+    bottom: 50%;
+    right: 50%;
+    pointer-events: none;
+    will-change: transform; /* Performance hint */
+    /* Style similar to video */
+    background: hsl(calc(1turn * var(--p)), 80%, 80%); /* Optional: Color based on position */
+    background: linear-gradient(35deg, #333, #222); /* More solid, opaque colors */
+    border: solid 4px #999;
+    transform-origin: bottom right;
+    /* Initial transform: flaps are 'open' (rotated/translated out) */
+    transform: rotate(-0.5turn) rotate(calc(1turn * var(--p))) skewX(30deg) translateX(-100%) translateY(90%);
+    /* Animation applied only when shutter is active */
+    animation: none; /* Default: no animation */
 }
 
-.shutter-blade.top-left { top: 0; left: 0; transform-origin: bottom right; }
-.shutter-blade.top-right { top: 0; right: 0; transform-origin: bottom left; }
-.shutter-blade.bottom-left { bottom: 0; left: 0; transform-origin: top right; }
-.shutter-blade.bottom-right { bottom: 0; right: 0; transform-origin: top left; }
-
-/* Shutter Close Animation State */
-.shutter-overlay.active .shutter-blade {
-    transform: scale(1); /* Blades meet in the middle */
+.shutter.active .flap {
+     /* The animation from the video */
+    animation: click 1.5s cubic-bezier(0.5, 0, 0.5, 1) 0.2s; /* Slowed animation down */
+    /* Animation runs once and stays at the end state (open).
+       We'll hide the shutter via JS after it finishes */
+    animation-fill-mode: forwards;
 }
 
-/* Shutter Open Animation State (triggered after close) */
-.shutter-overlay.open .shutter-blade.top-left { transform: scale(0) translateX(-50%) translateY(-50%); }
-.shutter-overlay.open .shutter-blade.top-right { transform: scale(0) translateX(50%) translateY(-50%); }
-.shutter-overlay.open .shutter-blade.bottom-left { transform: scale(0) translateX(-50%) translateY(50%); }
-.shutter-overlay.open .shutter-blade.bottom-right { transform: scale(0) translateX(50%) translateY(50%); }
 
-/* Initial state before activating (start slightly open/outside) */
-.shutter-overlay:not(.active) .shutter-blade.top-left { transform: scale(0) translateX(-50%) translateY(-50%); }
-.shutter-overlay:not(.active) .shutter-blade.top-right { transform: scale(0) translateX(50%) translateY(-50%); }
-.shutter-overlay:not(.active) .shutter-blade.bottom-left { transform: scale(0) translateX(-50%) translateY(50%); }
-.shutter-overlay:not(.active) .shutter-blade.bottom-right { transform: scale(0) translateX(50%) translateY(50%); }
+/* Keyframes for the flap animation (from video) */
+@keyframes click {
+    48%, 52% { /* The 'closed' state */
+        transform: rotate(-0.25turn) rotate(calc(1turn * var(--p))) skewX(30deg) translateX(0%) translateY(0%);
+    }
+    /* 0% and 100% use the initial .flap transform state (open) */
+}
+
 
 /* --- Lightbox --- */
+/* ... Keep your existing lightbox styles ... */
+/* Ensure lightbox z-index is higher than shutter */
 .lightbox {
     position: fixed;
     top: 0;
@@ -294,7 +332,9 @@ main {
     transform: rotate(90deg) scale(1.1);
 }
 
+
 /* --- Footer --- */
+/* ... Keep your existing footer styles ... */
 footer {
     text-align: center;
     padding: 1.5rem;
@@ -305,57 +345,6 @@ footer {
 }
 
 /* --- Responsiveness --- */
-@media (max-width: 768px) {
-    nav {
-        gap: 0.5rem; /* Closer links */
-        flex-wrap: wrap; /* Allow wrapping on small screens */
-        justify-content: space-around; /* Better distribution */
-        padding: 0 1rem;
-    }
-    .nav-link {
-        font-size: 1rem;
-        padding: 0.4rem 0.6rem;
-    }
-    main {
-        padding: 1rem;
-    }
-    .gallery h2 {
-        font-size: 2rem;
-        margin-bottom: 1.5rem;
-    }
-    .gallery-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust grid for smaller screens */
-        gap: 1rem;
-    }
-    .preloader-title {
-        font-size: 2.5rem;
-    }
-    .lightbox-close {
-        font-size: 2.5rem;
-        top: 15px;
-        right: 15px;
-    }
-}
-
-@media (max-width: 480px) {
-     nav {
-        gap: 0.2rem;
-    }
-    .nav-link {
-        font-size: 0.9rem;
-        padding: 0.3rem 0.4rem;
-    }
-    .gallery h2 {
-        font-size: 1.8rem;
-    }
-     .gallery-grid {
-        grid-template-columns: 1fr 1fr; /* Simpler grid */
-        gap: 0.5rem;
-    }
-    .preloader-title {
-        font-size: 2rem;
-    }
-     .lightbox-close {
-        font-size: 2rem;
-     }
-}
+/* ... Keep your existing media queries ... */
+@media (max-width: 768px) { /* ... */ }
+@media (max-width: 480px) { /* ... */ }
