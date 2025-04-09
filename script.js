@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const animationEndHandler = () => {
                 lightboxContent.setAttribute('src', imageUrl);
                 lightbox.classList.add('visible');
+                document.body.classList.add('no-scroll'); // disable scrolling
                 shutter.classList.remove('active');
                 isShutterAnimating = false;
                 firstFlap.removeEventListener('animationend', animationEndHandler);
@@ -68,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.warn("AnimationEnd event fallback triggered.");
                     lightboxContent.setAttribute('src', imageUrl);
                     lightbox.classList.add('visible');
+                    document.body.classList.add('no-scroll'); // disable scrolling
                     shutter.classList.remove('active');
                     isShutterAnimating = false;
                     firstFlap.removeEventListener('animationend', animationEndHandler);
@@ -79,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Close Lightbox
     const closeLightbox = () => {
         lightbox.classList.remove('visible');
+        document.body.classList.remove('no-scroll'); // restore scrolling
         // Optional: Delay clearing the src to prevent flash of empty space
         setTimeout(() => {
              if (!lightbox.classList.contains('visible')) { // Check if it wasn't reopened quickly
