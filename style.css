@@ -11,16 +11,19 @@ body {
     color: #f0f0f0;
     line-height: 1.6;
     overflow-x: hidden; /* Prevent horizontal scroll */
+    min-height: 100vh; /* Ensure footer can stick to bottom if content is short */
+    display: flex; /* Added for potential sticky footer pattern */
+    flex-direction: column; /* Added for potential sticky footer pattern */
 }
 
-/* --- Preloader --- */
+/* --- Preloader (Keep As Is) --- */
 .preloader {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #000; /* Black background for preloader */
+    background-color: #000;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -28,13 +31,17 @@ body {
     opacity: 1;
     visibility: visible;
     transition: opacity 2s ease-in-out, visibility 2s ease-in-out;
+<<<<<<< Updated upstream
     pointer-events: auto; /* Initially clickable/interactive if needed, though usually not */
+=======
+    pointer-events: auto;
+>>>>>>> Stashed changes
 }
 
 .preloader-content {
     text-align: center;
-    opacity: 0; /* Start hidden */
-    animation: fadeInContent 1.5s ease-out 0.5s forwards; /* Fade in after delay */
+    opacity: 0;
+    animation: fadeInContent 1.5s ease-out 0.5s forwards;
 }
 
 .preloader-title {
@@ -42,7 +49,7 @@ body {
     color: #fff;
     margin-bottom: 0.5rem;
     letter-spacing: 2px;
-    animation: scaleUpText 1s ease-in-out 0.5s forwards; /* Animate title */
+    animation: scaleUpText 1s ease-in-out 0.5s forwards;
 }
 
 .preloader p {
@@ -53,13 +60,14 @@ body {
 .preloader.hidden {
     opacity: 0;
     visibility: hidden;
+<<<<<<< Updated upstream
     pointer-events: none; /* Prevent interaction when hidden */
+=======
+    pointer-events: none;
+>>>>>>> Stashed changes
 }
 
-@keyframes fadeInContent {
-    to { opacity: 1; }
-}
-
+@keyframes fadeInContent { to { opacity: 1; } }
 @keyframes scaleUpText {
     0% { transform: scale(0.8); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
@@ -67,14 +75,16 @@ body {
 
 /* --- Main Content Visibility (Related to Preloader) --- */
 .main-content {
-    opacity: 0; /* Start hidden */
-    transition: opacity 0.8s ease-in 0.2s; /* Fade in after preloader fades */
+    opacity: 0;
+    transition: opacity 0.8s ease-in 0.2s;
+    flex-grow: 1; /* Added for sticky footer pattern */
 }
 
 body.loaded .main-content {
-    opacity: 1; /* Show when body gets 'loaded' class */
+    opacity: 1;
 }
 
+<<<<<<< Updated upstream
 /* --- Responsive Preloader Title (Optional, but included in your original) --- */
 @media (max-width: 768px) {
     .preloader-title {
@@ -89,13 +99,16 @@ body.loaded .main-content {
 }
 
 /* --- Header & Navigation --- */
+=======
+/* --- Header & Navigation (Keep As Is) --- */
+>>>>>>> Stashed changes
 header {
-    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+    background-color: rgba(0, 0, 0, 0.8);
     padding: 1rem 0;
-    position: sticky; /* Stick to top */
+    position: sticky;
     top: 0;
     z-index: 100;
-    backdrop-filter: blur(5px); /* Nice blur effect */
+    backdrop-filter: blur(5px);
     box-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
@@ -103,7 +116,9 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2rem; /* Spacing between nav items */
+    gap: 2rem;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+    padding: 0 1rem; /* Add horizontal padding */
 }
 
 .nav-link {
@@ -114,6 +129,7 @@ nav {
     position: relative;
     transition: color 0.3s ease, transform 0.3s ease;
     letter-spacing: 1px;
+    white-space: nowrap; /* Prevent links breaking mid-word */
 }
 
 .nav-link::after {
@@ -123,59 +139,71 @@ nav {
     left: 0;
     width: 0;
     height: 2px;
-    background-color: #00bcd4; /* Accent color */
+    background-color: #00bcd4;
     transition: width 0.4s ease;
 }
 
 .nav-link:hover {
     color: #fff;
-    transform: translateY(-2px); /* Slight lift on hover */
+    transform: translateY(-2px);
 }
 
 .nav-link:hover::after,
 .nav-link.active::after {
-    width: 100%; /* Underline animation */
+    width: 100%;
 }
 
 .nav-link.active {
-    color: #00bcd4; /* Highlight active link */
+    color: #00bcd4;
     font-weight: bold;
 }
 
+<<<<<<< Updated upstream
 /* --- Main Galleries --- */
 /* ... Keep your existing main/gallery styles ... */
+=======
+
+/* --- Main Content & Page Section Handling --- */
+>>>>>>> Stashed changes
 main {
     padding: 2rem;
     max-width: 1200px;
-    margin: 2rem auto; /* Center the content */
+    margin: 0 auto 2rem auto; /* Center the content, remove top margin as header is sticky */
 }
 
-.gallery {
-    display: none; /* Hide galleries by default */
+/* HIDE ALL SECTIONS BY DEFAULT */
+.page-section {
+    display: none;
     opacity: 0;
-    animation: galleryFadeIn 0.8s ease forwards; /* Animation for switching */
+    animation: pageFadeIn 0.6s ease forwards;
 }
 
-.gallery.active {
-    display: block; /* Show active gallery */
+/* SHOW ACTIVE SECTION */
+.page-section.active {
+    display: block; /* Or 'flex', 'grid' if needed by default */
     opacity: 1;
 }
 
-.gallery h2 {
+/* Gallery Heading Styles (Applies within any .page-section that also has .gallery class) */
+.gallery h2,
+#about h2,
+#contact h2 { /* Apply similar styling to other page headings */
     text-align: center;
     font-size: 2.5rem;
+    margin-top: 1rem; /* Add some space from nav */
     margin-bottom: 2.5rem;
     color: #e0e0e0;
     text-transform: uppercase;
     letter-spacing: 3px;
     border-bottom: 2px solid #00bcd4;
-    display: inline-block; /* Allow border only under text */
+    display: inline-block;
     padding-bottom: 0.5rem;
-    position: relative; /* Position center helper */
+    position: relative;
     left: 50%;
     transform: translateX(-50%);
 }
 
+<<<<<<< Updated upstream
 @keyframes galleryFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
 /* --- Gallery Grid --- */
@@ -188,6 +216,220 @@ main {
 
 body.no-scroll {
     overflow: hidden;
+=======
+/* Simple Fade-in animation for pages */
+@keyframes pageFadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* --- Home Page Specific Styles --- */
+
+/* 1. Hero Section */
+.hero-section {
+    background: url('img/hero.jpeg') no-repeat center center/cover;
+    /* Fallback solid color if image fails */
+    background-color: #333;
+    min-height: 60vh; /* Adjust height as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #fff;
+    position: relative; /* For pseudo-element overlay */
+    border-radius: 8px;
+    overflow: hidden; /* Ensures overlay stays within bounds */
+}
+
+/* Optional: Dark overlay for better text readability */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Adjust opacity (last value) */
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative; /* Ensure text is above the overlay */
+    z-index: 2;
+    max-width: 800px;
+}
+
+.hero-content h1 {
+    font-size: 3rem; /* Adjust as needed */
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto; /* Center paragraph if max-width is applied */
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.6);
+}
+
+/* 2. About Section on Home Page */
+.about-section-home {
+    padding: 3rem 1rem;
+    background-color: rgba(255, 255, 255, 0.05); /* Slightly lighter background section */
+    margin-top: 3rem;
+    border-radius: 8px;
+}
+
+.about-section-home h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #e0e0e0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.about-content {
+    display: flex; /* Arrange text and cards */
+    flex-wrap: wrap; /* Allow stacking on smaller screens */
+    gap: 2rem;
+}
+
+.about-text {
+    flex: 1; /* Take available space */
+    min-width: 280px; /* Ensure text area doesn't get too squished */
+}
+
+.about-text p {
+    margin-bottom: 1rem;
+    color: #ccc;
+}
+
+/* 3. Service Cards Section on Home Page */
+.service-cards-container {
+     flex: 1; /* Take available space */
+     min-width: 300px; /* Prevent squishing */
+}
+
+.service-cards-container h3 {
+     text-align: center;
+     font-size: 1.5rem;
+     margin-bottom: 1.5rem;
+     color: #00bcd4; /* Accent color */
+}
+
+.service-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive cards */
+    gap: 1.5rem;
+>>>>>>> Stashed changes
+}
+
+.card {
+    background-color: #2a2a2a; /* Darker card background */
+    padding: 1.5rem 1rem;
+    text-align: center;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+}
+
+.card-icon {
+    color: #00bcd4; /* Accent color for icons */
+    margin-bottom: 1rem;
+}
+
+.card h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.card p {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+/* --- About Page Specific Styles --- */
+#about.page-section {
+    padding: 2rem 1rem;
+    max-width: 900px; /* Constrain width for readability */
+    margin: 0 auto;
+}
+
+.about-full-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content vertically */
+    text-align: center; /* Center text */
+}
+
+.about-profile-pic {
+    width: 150px; /* Adjust size */
+    height: 150px;
+    border-radius: 50%; /* Make it round */
+    object-fit: cover; /* Ensure image covers area */
+    margin-bottom: 1.5rem;
+    border: 4px solid #00bcd4; /* Optional accent border */
+}
+
+.about-full-content p {
+    margin-bottom: 1rem;
+    color: #ccc;
+    max-width: 700px; /* Limit text width */
+    line-height: 1.7;
+}
+
+
+/* --- Contact Page Specific Styles --- */
+#contact.page-section {
+    padding: 2rem 1rem;
+    max-width: 800px; /* Constrain width */
+    margin: 0 auto;
+    text-align: center; /* Center content */
+}
+
+.contact-details-page p {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #ccc;
+}
+
+.contact-details-page i {
+    color: #00bcd4; /* Accent color */
+    margin-right: 10px;
+    width: 20px; /* Align icons */
+    text-align: center;
+}
+
+.contact-details-page a {
+    color: #ADD8E6; /* Lighter blue for links */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contact-details-page a:hover {
+    color: #00bcd4; /* Accent color on hover */
+    text-decoration: underline;
+}
+
+
+/* --- Gallery Grid -> Columns Layout --- */
+.gallery-grid {
+    display: block;
+    column-gap: 1rem;
+    column-count: 4;
+    /* Optionally:
+       column-width: 280px; // Browser will create as many columns of at least 280px as fit
+    */
 }
 
 .gallery-image {
@@ -196,18 +438,22 @@ body.no-scroll {
     display: block;
     border-radius: 5px;
     cursor: pointer;
-    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), /* Smoother scale */
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
                 box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
                 filter 0.4s ease;
-    will-change: transform, box-shadow; /* Performance hint */
+    will-change: transform, box-shadow;
+    margin-bottom: 1rem;  /* Vertical spacing below each image */
+    break-inside: avoid;  /* Prevent images from breaking across columns */
 }
 
-.gallery-image:hover {
-    transform: scale(1.05); /* Slightly enlarge on hover */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
-    filter: brightness(1.1); /* Subtle brightness */
+/* ADD Responsive Column Count */
+@media (max-width: 1200px) {
+    .gallery-grid {
+        column-count: 3; /* Use 3 columns on medium screens */
+    }
 }
 
+<<<<<<< Updated upstream
 /* --- REMOVE OLD SHUTTER STYLES ---
 .shutter-overlay { ... }
 .shutter-blade { ... }
@@ -217,12 +463,35 @@ body.no-scroll {
 
 
 /* --- NEW Camera Shutter Effect (Flap Style) --- */
+=======
+@media (max-width: 768px) {
+    .gallery-grid {
+        column-count: 2; /* Use 2 columns on smaller tablets/large phones */
+        column-gap: 0.75rem;
+    }
+    .gallery-image {
+         margin-bottom: 0.75rem; /* Match vertical gap */
+     }
+}
+
+@media (max-width: 480px) {
+    .gallery-grid {
+        column-count: 1; /* Use a single column on small phones */
+    }
+    .gallery-image {
+         margin-bottom: 1rem;
+     }
+}
+
+/* --- NEW Camera Shutter Effect (Keep As Is) --- */
+>>>>>>> Stashed changes
 .shutter {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
+<<<<<<< Updated upstream
     z-index: 2000; /* Below lightbox (3000) but above content */
     pointer-events: none; /* Allow clicks through when inactive */
     overflow: hidden;
@@ -230,22 +499,41 @@ body.no-scroll {
     visibility: hidden; /* Start hidden */
     transition: opacity 0.1s ease, visibility 0.1s ease; /* Fast fade for visibility */
     background: transparent; /* Ensure no background interferes */
+=======
+    z-index: 2000;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.1s ease, visibility 0.1s ease;
+    background: transparent;
+>>>>>>> Stashed changes
 }
 
 .shutter.active {
     opacity: 1;
     visibility: visible;
+<<<<<<< Updated upstream
     pointer-events: auto; /* Block clicks while animating */
 }
 
 .flap {
     --p: calc(var(--i) / var(--flaps)); /* Percentage/progress based on flap index */
     width: 150vmax; /* Large size to cover screen when rotated */
+=======
+    pointer-events: auto;
+}
+
+.flap {
+    --p: calc(var(--i) / var(--flaps));
+    width: 150vmax;
+>>>>>>> Stashed changes
     height: 150vmax;
     position: absolute;
     bottom: 50%;
     right: 50%;
     pointer-events: none;
+<<<<<<< Updated upstream
     will-change: transform; /* Performance hint */
     /* Style similar to video */
     background: hsl(calc(1turn * var(--p)), 80%, 80%); /* Optional: Color based on position */
@@ -279,22 +567,45 @@ body.no-scroll {
 /* --- Lightbox --- */
 /* ... Keep your existing lightbox styles ... */
 /* Ensure lightbox z-index is higher than shutter */
+=======
+    will-change: transform;
+    background: linear-gradient(35deg, #333, #222);
+    border: solid 4px #999;
+    transform-origin: bottom right;
+    transform: rotate(-0.5turn) rotate(calc(1turn * var(--p))) skewX(30deg) translateX(-100%) translateY(90%);
+    animation: none;
+}
+
+.shutter.active .flap {
+    animation: click 1.5s cubic-bezier(0.5, 0, 0.5, 1) 0.2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes click {
+    48%, 52% {
+        transform: rotate(-0.25turn) rotate(calc(1turn * var(--p))) skewX(30deg) translateX(-0.5%) translateY(-0.5%);
+    }
+}
+
+
+/* --- Lightbox (Keep As Is, ensure z-index) --- */
+>>>>>>> Stashed changes
 .lightbox {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9); /* Darker overlay */
+    background-color: rgba(0, 0, 0, 0.9);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 3000; /* Highest level */
+    z-index: 3000; /* Highest */
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.5s ease, visibility 0.5s ease;
-    padding: 20px; /* Padding around the image */
-    cursor: zoom-out; /* Indicate closable background */
+    padding: 20px;
+    cursor: zoom-out;
 }
 
 .lightbox.visible {
@@ -308,10 +619,10 @@ body.no-scroll {
     max-height: 90vh;
     opacity: 0;
     transform: scale(0.8);
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; /* Springy zoom effect */
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
     box-shadow: 0 15px 40px rgba(0,0,0,0.7);
     border-radius: 5px;
-    cursor: default; /* Default cursor for the image itself */
+    cursor: default;
 }
 
 .lightbox.visible .lightbox-content {
@@ -332,22 +643,27 @@ body.no-scroll {
 }
 
 .lightbox-close:hover {
-    color: #00bcd4; /* Accent color on hover */
+    color: #00bcd4;
     transform: rotate(90deg) scale(1.1);
 }
 
 
+<<<<<<< Updated upstream
 /* --- Footer --- */
 /* ... Keep your existing footer styles ... */
+=======
+/* --- UPDATED Footer --- */
+>>>>>>> Stashed changes
 footer {
-    text-align: center;
-    padding: 1.5rem;
-    margin-top: 3rem;
-    background-color: #111;
-    color: #888;
+    padding: 2rem 1rem; /* Increased padding */
+    margin-top: 3rem; /* Keep space from content */
+    background-color: #111; /* Very dark background */
+    color: #aaa; /* Slightly lighter text */
     font-size: 0.9rem;
+    border-top: 1px solid #333; /* Subtle top border */
 }
 
+<<<<<<< Updated upstream
 /* New styles for footer socials */
 .socials {
     display: flex;
@@ -393,3 +709,105 @@ footer {
 .socials a i {
     font-size: 1.5rem;
 }
+=======
+.footer-content {
+    max-width: 1100px;
+    margin: 0 auto; /* Center content */
+    display: grid; /* Use grid for layout */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+    gap: 2rem; /* Space between columns */
+    text-align: left; /* Align text left within columns */
+}
+
+.footer-contact h3,
+.footer-socials h3 {
+    color: #fff; /* White headings */
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #444; /* Subtle underline */
+    padding-bottom: 0.5rem;
+}
+
+.footer-contact p {
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
+}
+
+.footer-contact .icon { /* Styling for icons in contact */
+    color: #00bcd4; /* Accent color */
+    margin-right: 10px;
+    width: 20px; /* Consistent width */
+    text-align: center;
+}
+
+.footer-contact a,
+.footer-copy a {
+    color: #ccc; /* Light grey links */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-contact a:hover,
+.footer-copy a:hover {
+    color: #00bcd4; /* Accent on hover */
+    text-decoration: underline;
+}
+
+.social-links {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping if needed */
+    gap: 1rem; /* Space between icons */
+}
+
+.social-link {
+    color: #ccc; /* Default icon color */
+    font-size: 1.6rem; /* Larger icons */
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-link:hover {
+    transform: scale(1.2); /* Grow on hover */
+    /* Brand colors on hover */
+}
+.social-link.facebook:hover { color: #3b5998; }
+.social-link.instagram:hover { color: #E1306C; } /* Gradient: use primary color */
+.social-link.twitter:hover { color: #1DA1F2; }
+.social-link.linkedin:hover { color: #0077B5; }
+/* Add other brand hover colors if needed */
+
+.footer-copy {
+    grid-column: 1 / -1; /* Span full width */
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #333; /* Separator line */
+    font-size: 0.85rem;
+    color: #888; /* Dimmer text for copyright */
+}
+
+/* --- Responsiveness (Keep As Is, adjust if needed) --- */
+
+@media (max-width: 768px) {
+    .nav-link { font-size: 1rem; padding: 0.5rem 0.8rem; }
+    nav { gap: 1rem; } /* Reduce nav gap */
+    .hero-content h1 { font-size: 2.5rem; }
+    .hero-content p { font-size: 1.1rem; }
+    .about-content { flex-direction: column; } /* Stack about text/cards */
+    .footer-content { grid-template-columns: 1fr; text-align: center;} /* Stack footer columns */
+    .social-links { justify-content: center; } /* Center social links */
+}
+
+@media (max-width: 480px) {
+    nav { gap: 0.5rem; }
+    .nav-link { font-size: 0.9rem; padding: 0.5rem 0.5rem;}
+    .hero-content h1 { font-size: 2rem; }
+    .hero-content p { font-size: 1rem; }
+    main { padding: 1rem; } /* Reduce main padding */
+    .gallery h2, #about h2, #contact h2 { font-size: 2rem; margin-bottom: 2rem; }
+    .service-cards { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem;}
+    .card { padding: 1rem 0.8rem;}
+    .social-link { font-size: 1.4rem; }
+    .footer-content { gap: 1.5rem;}
+    .footer-copy { margin-top: 1rem; padding-top: 1rem;}
+}
+>>>>>>> Stashed changes
