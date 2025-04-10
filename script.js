@@ -218,3 +218,142 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 }); // End DOMContentLoaded
+
+    // --- MASONRY INITIALIZATION ---
+
+    // Select all gallery grid containers
+    const galleryGrids = document.querySelectorAll('.gallery-grid');
+    let masonryInstances = []; // Store instances if we need to destroy/reload later
+
+    function initMasonry() {
+        console.log("Attempting to initialize Masonry...");
+        galleryGrids.forEach((grid, index) => {
+            // Optional: Use imagesLoaded for reliability
+            // Requires adding the imagesLoaded script to your HTML
+            /*
+            const imgLoad = imagesLoaded(grid);
+            imgLoad.on('progress', function() {
+                console.log('Masonry layout on progress for grid:', index);
+                if (masonryInstances[index]) {
+                     masonryInstances[index].layout();
+                 }
+            });
+            imgLoad.on('done', function() {
+                 console.log('Images loaded, initializing/laying out Masonry for grid:', index);
+                 if (!masonryInstances[index]) {
+                    masonryInstances[index] = new Masonry(grid, {
+                         itemSelector: '.gallery-image',
+                         columnWidth: '.gallery-image', // Use item width defined in CSS
+                         gutter: 16, // **MUST MATCH the HORIZONTAL gap intended (e.g., 1rem = 16px)
+                         percentPosition: true,
+                         fitWidth: false // Adjust if needed
+                    });
+                 } else {
+                     masonryInstances[index].layout();
+                 }
+             });
+             imgLoad.on('fail', function() {
+                 console.error("ImagesLoaded failed for grid:", index);
+             });
+            */
+
+
+            // --- Simpler Initialization (Without imagesLoaded) ---
+            // Runs immediately, might need recalculation if images load late
+             if (typeof Masonry !== 'undefined') {
+                 console.log("Initializing Masonry (simple) for grid:", grid);
+                 // Destroy previous instance if resizing or re-navigating, prevents errors
+                 if (masonryInstances[index]) {
+                     // console.log("Destroying existing Masonry instance for grid:", index);
+                     // masonryInstances[index].destroy(); // Destroy might be too aggressive on simple nav
+                 }
+                 masonryInstances[index] = new Masonry( grid, {
+                    itemSelector: '.gallery-image',
+                    columnWidth: '.gallery-image', // Tells Masonry how wide a column is based on item width
+                    // --- IMPORTANT: Gutter is HORIZONTAL space ---
+                    // Masonry calculates positions; it uses this gutter value.
+                    // Vertical space comes from the margin-bottom on .gallery-image in CSS.
+                    // Set gutter value in PIXELS to match the desired horizontal gap
+                    // e.g., if gap should be 1rem (16px), set gutter: 16
+                    gutter: 16,
+                    percentPosition: true, // Good for responsive % widths in CSS
+                    initLayout: true // Initialize layout immediately
+                });
+
+                // **Crucial:** Re-layout Masonry when switching tabs/pages if elements were display:none
+                // We might need to explicitly call layout when a section becomes active.
+            } else {
+                 console.error("Masonry library not found!");
+             }
+             // --- End Simpler Init ---
+        });
+    }
+
+    // Initial call on load
+    // If using imagesLoaded, the init happens inside its 'done' event.
+    // If NOT using imagesLoaded, call initMasonry() here.
+    initMasonry(); // Remove this line if using the imagesLoaded 'done' event method
+
+    // Re-layout Masonry when a gallery section becomes active
+    // Modify the navigation logic slightly:
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetPageId = link.getAttribute('data-page');
+
+            if (link.classList.contains('active')) return;
+
+            navLinks.forEach(l => l.classList.remove('active'));
+            pageSections.forEach(sec => sec.classList.remove('active'));
+
+            link.classList.add('active');
+            const targetSection = document.getElementById(targetPageId);
+
+            if (targetSection) {
+                targetSection.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // --- ADD THIS CHECK ---
+                // If the activated section contains a gallery grid, re-layout Masonry
+                const gridInTarget = targetSection.querySelector('.gallery-grid');
+                if (gridInTarget) {
+                    const gridIndex = Array.from(galleryGrids).indexOf(gridInTarget);
+                    if (gridIndex !== -1 && masonryInstances[gridIndex]) {
+                         console.log("Re-laying out Masonry for newly active grid:", gridIndex);
+                         // Use setTimeout to ensure element is visible and dimensions are calculated
+                         setTimeout(() => {
+                              masonryInstances[gridIndex].layout();
+                         }, 50); // Small delay often helps
+                    } else if (gridIndex !== -1 && !masonryInstances[gridIndex]) {
+                        // If instance didn't exist (e.g., first time showing), try initializing again
+                        console.log("Masonry instance not found for active grid, re-initializing");
+                         initMasonry(); // Re-run full init (may recreate some instances)
+                    }
+                }
+                // --- END ADDED CHECK ---
+
+            } else {
+                console.warn(`Navigation target section not found for ID: ${targetPageId}`);
+                const homeSection = document.getElementById('home');
+                if(homeSection) homeSection.classList.add('active');
+                const homeLink = document.querySelector('.nav-link[data-page="home"]');
+                if(homeLink) homeLink.classList.add('active');
+            }
+        });
+    });
+
+    // Optional: Add resize listener to re-layout Masonry (important!)
+     let resizeTimeout;
+     window.addEventListener('resize', () => {
+         clearTimeout(resizeTimeout);
+         resizeTimeout = setTimeout(() => {
+             console.log("Window resized, relaying out all Masonry instances.");
+             masonryInstances.forEach(instance => {
+                 if(instance) {
+                     instance.layout();
+                 }
+             });
+         }, 250); // Debounce resize event
+     });
+
+    // --- End MASONRY ---
