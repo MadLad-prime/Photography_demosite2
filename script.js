@@ -18,7 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 preloader.classList.add('hidden');
             }
             document.body.classList.add('loaded');
+<<<<<<< Updated upstream
         }, 3000); // Increased delay by 2 seconds (was 1000ms)
+=======
+        }, 1000); // Adjust timing if needed
+>>>>>>> Stashed changes
     });
 
     // --- UPDATED Navigation Logic ---

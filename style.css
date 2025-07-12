@@ -30,11 +30,15 @@ body {
     z-index: 10000;
     opacity: 1;
     visibility: visible;
+<<<<<<< Updated upstream
 
     transition: opacity 4s ease-in-out, visibility 4s ease-in-out;
 
     transition: opacity 2s ease-in-out, visibility 2s ease-in-out;
 
+=======
+    transition: opacity 2s ease-in-out, visibility 2s ease-in-out;
+>>>>>>> Stashed changes
     pointer-events: auto;
 }
 
@@ -72,7 +76,11 @@ body {
 /* --- Main Content Visibility --- */
 .main-content {
     opacity: 0;
+<<<<<<< Updated upstream
     transition: none;
+=======
+    transition: opacity 0.8s ease-in 0.2s;
+>>>>>>> Stashed changes
     flex-grow: 1; /* Added for sticky footer pattern */
 }
 
@@ -149,7 +157,11 @@ main {
 .page-section {
     display: none;
     opacity: 0;
+<<<<<<< Updated upstream
     animation: none;
+=======
+    animation: pageFadeIn 0.6s ease forwards;
+>>>>>>> Stashed changes
 }
 
 /* SHOW ACTIVE SECTION */
@@ -282,6 +294,7 @@ main {
 }
 
 .service-cards {
+<<<<<<< Updated upstream
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive cards */
     gap: 1.5rem;
@@ -390,6 +403,115 @@ main {
 
 body.no-scroll {
     overflow: hidden;
+=======
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive cards */
+    gap: 1.5rem;
+>>>>>>> Stashed changes
+}
+
+.card {
+    background-color: #2a2a2a; /* Darker card background */
+    padding: 1.5rem 1rem;
+    text-align: center;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+}
+
+.card-icon {
+    color: #00bcd4; /* Accent color for icons */
+    margin-bottom: 1rem;
+}
+
+.card h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.card p {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+/* --- About Page Specific Styles --- */
+#about.page-section {
+    padding: 2rem 1rem;
+    max-width: 900px; /* Constrain width for readability */
+    margin: 0 auto;
+}
+
+.about-full-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content vertically */
+    text-align: center; /* Center text */
+}
+
+.about-profile-pic {
+    width: 150px; /* Adjust size */
+    height: 150px;
+    border-radius: 50%; /* Make it round */
+    object-fit: cover; /* Ensure image covers area */
+    margin-bottom: 1.5rem;
+    border: 4px solid #00bcd4; /* Optional accent border */
+}
+
+.about-full-content p {
+    margin-bottom: 1rem;
+    color: #ccc;
+    max-width: 700px; /* Limit text width */
+    line-height: 1.7;
+}
+
+
+/* --- Contact Page Specific Styles --- */
+#contact.page-section {
+    padding: 2rem 1rem;
+    max-width: 800px; /* Constrain width */
+    margin: 0 auto;
+    text-align: center; /* Center content */
+}
+
+.contact-details-page p {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #ccc;
+}
+
+.contact-details-page i {
+    color: #00bcd4; /* Accent color */
+    margin-right: 10px;
+    width: 20px; /* Align icons */
+    text-align: center;
+}
+
+.contact-details-page a {
+    color: #ADD8E6; /* Lighter blue for links */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contact-details-page a:hover {
+    color: #00bcd4; /* Accent color on hover */
+    text-decoration: underline;
+}
+
+
+/* --- Gallery Grid -> Columns Layout --- */
+.gallery-grid {
+    display: block;
+    column-gap: 1rem;
+    column-count: 4;
+    /* Optionally:
+       column-width: 280px; // Browser will create as many columns of at least 280px as fit
+    */
 }
 
 .gallery-image {
@@ -402,6 +524,7 @@ body.no-scroll {
                 box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
                 filter 0.4s ease;
     will-change: transform, box-shadow;
+<<<<<<< Updated upstream
 }
 
 .gallery-image:hover {
@@ -410,6 +533,38 @@ body.no-scroll {
     filter: brightness(1.1);
 }
 
+=======
+    margin-bottom: 1rem;  /* Vertical spacing below each image */
+    break-inside: avoid;  /* Prevent images from breaking across columns */
+}
+
+/* ADD Responsive Column Count */
+@media (max-width: 1200px) {
+    .gallery-grid {
+        column-count: 3; /* Use 3 columns on medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .gallery-grid {
+        column-count: 2; /* Use 2 columns on smaller tablets/large phones */
+        column-gap: 0.75rem;
+    }
+    .gallery-image {
+         margin-bottom: 0.75rem; /* Match vertical gap */
+     }
+}
+
+@media (max-width: 480px) {
+    .gallery-grid {
+        column-count: 1; /* Use a single column on small phones */
+    }
+    .gallery-image {
+         margin-bottom: 1rem;
+     }
+}
+
+>>>>>>> Stashed changes
 /* --- NEW Camera Shutter Effect (Keep As Is) --- */
 .shutter {
     position: fixed;
@@ -455,7 +610,11 @@ body.no-scroll {
 
 @keyframes click {
     48%, 52% {
+<<<<<<< Updated upstream
         transform: rotate(-0.25turn) rotate(calc(1turn * var(--p))) skewX(30deg) translateX(0%) translateY(0%);
+=======
+        transform: rotate(-0.25turn) rotate(calc(1turn * var(--p))) skewX(30deg) translateX(-0.5%) translateY(-0.5%);
+>>>>>>> Stashed changes
     }
 }
 
@@ -628,6 +787,7 @@ footer {
     .social-link { font-size: 1.4rem; }
     .footer-content { gap: 1.5rem;}
     .footer-copy { margin-top: 1rem; padding-top: 1rem;}
+<<<<<<< Updated upstream
     .gallery-image {
         max-height: 200px;
         object-fit: cover;
@@ -648,3 +808,6 @@ footer {
 }
 
 
+=======
+}
+>>>>>>> Stashed changes
