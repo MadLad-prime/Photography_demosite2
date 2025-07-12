@@ -1,0 +1,11 @@
+header {}
+.banner{
+    position: relative;
+}
+.banner img{
+    max-height: 1%;
+}
+.banner .welcome{
+    position: absolute;
+}
+siloet
