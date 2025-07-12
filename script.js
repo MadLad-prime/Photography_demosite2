@@ -19,7 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             document.body.classList.add('loaded');
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         }, 3000); // Increased delay by 2 seconds (was 1000ms)
+=======
+        }, 1000); // Adjust timing if needed
+>>>>>>> Stashed changes
 =======
         }, 1000); // Adjust timing if needed
 >>>>>>> Stashed changes
